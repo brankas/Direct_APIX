@@ -1,0 +1,18 @@
+{
+    "name": "direct-apix-demo",
+    "version": "1.0.0",
+    "description": "This is a APIX IDE test project for Node.js",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node index.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.17.1",
+        "mustache": "^4.2.0",
+        "pug": "^3.0.2",
+        "swagger-client": "^3.12.1"
+    }
+}
