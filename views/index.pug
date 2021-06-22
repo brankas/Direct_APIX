@@ -9,14 +9,16 @@ html
       a(type='button', value='Checkout', class='waves-effect waves-light btn-large', onclick='submitForm()') Checkout
 
     div(class='container center-align')
-      div(class="card-panel grey darken-3 left-align" style="color: white; margin-top: 10%; height: 50%; font-family: monospace; overflow-wrap: break-word;" id="console") 
+      div(class="card-panel grey darken-3 left-align" style="color: white; margin-top: 10%; height: auto; font-family: monospace; overflow-wrap: break-word;" id="console") 
       
 script.
   function submitForm() {
-     var xhttp = new XMLHttpRequest();
+      var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           var ajax_response = JSON.parse(this.response) // to prettify it
+          var redir = JSON.stringify(ajax_response.raw_response.redir).replaceAll('"', '')
+          console.log(redir)
           var format = `Creating Checkout transaction at ${ajax_response.datetime} <br> 
           Calling Checkout API - ${ajax_response.url} <br>
           Request Body: <br>${JSON.stringify(ajax_response.raw_request)} 
@@ -24,7 +26,8 @@ script.
           <br><br><br> 
           
           Response Status: ${ajax_response.raw_response.status} <br>
-          Response: <br>${JSON.stringify(ajax_response.raw_response.body)}`
+          Response: <br>${JSON.stringify(ajax_response.raw_response.body)} <br>
+          Redirect URL: <a href="${redir}">${redir}</a>`
           document.getElementById("console").innerHTML = format;
         }
       };

@@ -55,7 +55,7 @@ router.get("/checkout", (req, res) => {
     }).then((response) => {
         if(response.body.redirect_uri != "") {
             res.setHeader('Content-Type', 'application/json');
-            res.end(JSON.stringify({"datetime": dt, "url": url, "raw_request":  checkout_request, "raw_response": {"body": response.body, "status": response.status}}));
+            res.end(JSON.stringify({"datetime": dt, "url": url, "raw_request":  checkout_request, "raw_response": {"body": response.body, "status": response.status, "redir": response.body.short_redirect_uri}}));
         }
     
     }).catch((err) => {
