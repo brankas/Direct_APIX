@@ -5,6 +5,29 @@ html
     script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js')
   body
     div(class='container center-align')
-      h1 Welcome!
-      form(action='/checkout', method='POST', id='checkoutForm')
-      a(type='submit', value='Checkout', class='waves-effect waves-light btn-large', onclick='document.getElementById("checkoutForm").submit();') Checkout
+      h1 Direct APIX Demo!
+      a(type='button', value='Checkout', class='waves-effect waves-light btn-large', onclick='submitForm()') Checkout
+
+    div(class='container center-align')
+      div(class="card-panel grey darken-3 left-align" style="color: white; margin-top: 10%; height: 50%; font-family: monospace; overflow-wrap: break-word;" id="console") 
+      
+script.
+  function submitForm() {
+     var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          var ajax_response = JSON.parse(this.response) // to prettify it
+          var format = `Creating Checkout transaction at ${ajax_response.datetime} <br> 
+          Calling Checkout API - ${ajax_response.url} <br>
+          Request Body: <br>${JSON.stringify(ajax_response.raw_request)} 
+          
+          <br><br><br> 
+          
+          Response Status: ${ajax_response.raw_response.status} <br>
+          Response: <br>${JSON.stringify(ajax_response.raw_response.body)}`
+          document.getElementById("console").innerHTML = format;
+        }
+      };
+      xhttp.open("GET", "/checkout", true);
+      xhttp.send();
+  }

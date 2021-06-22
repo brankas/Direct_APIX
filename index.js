@@ -34,33 +34,35 @@ router.get("/", (req, res) => {
 });
 
 // Checkout
-router.post("/checkout", (req, res) => {
+router.get("/checkout", (req, res) => {
   let host = host_url
   let success_page = host + "/success"
   let failed_page = host + "/failed"
 
   exports.main = function () {
-  
+    let checkout_request = {"from":{"type":"BANK","country":"PH"},"destination_account_id":"443760d8-bf53-11eb-9e5f-42010a970007","amount":{"cur":"PHP","num":"10000"},"memo":"Sample Transfer Memo","client":{"display_name":"AmazBay","short_redirect_uri":true,"return_url":success_page,"fail_url":failed_page}}
+    let dt = new Date().toISOString();
+    let url = "https://api.apixplatform.com/direct/v1/checkout"
     swagger.http({
-      url: "https://api.apixplatform.com/direct/v1/checkout",
+      url: url,
       method: 'post',
       query: {},
       headers: {
         "X-Authorization": bearer_token,
         "x-api-key": sandbox_api_key
       },
-        body: JSON.stringify({"from":{"type":"BANK","country":"PH"},"destination_account_id":"443760d8-bf53-11eb-9e5f-42010a970007","amount":{"cur":"PHP","num":"10000"},"memo":"Sample Transfer Memo","client":{"display_name":"AmazBay","return_url":success_page,"fail_url":failed_page}})
+        body: JSON.stringify(checkout_request)
     }).then((response) => {
         if(response.body.redirect_uri != "") {
-            res.redirect(response.body.redirect_uri)
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({"datetime": dt, "url": url, "raw_request":  checkout_request, "raw_response": {"body": response.body, "status": response.status}}));
         }
     
     }).catch((err) => {
       console.error(err);
     })
-    }
-    
-    this.main();
+  }
+  this.main();
 });
 
 
